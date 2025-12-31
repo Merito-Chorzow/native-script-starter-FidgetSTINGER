@@ -1,46 +1,92 @@
 # NativeScript Inventory App
 
-Aplikacja mobilna do zarządzania stanem magazynowym (inwentaryzacja), tworzona w technologii NativeScript z wykorzystaniem frameworka Angular. Aplikacja posiada obecnie podstawowy interfejs UI i logikę lokalną. Funkcje natywne i komunikacja z API są w trakcie implementacji.
+Projekt aplikacji mobilnej do zarządzania stanem magazynowym, zrealizowany w technologii **NativeScript + Angular**.
 
-## Obecna Funkcjonalność
+Aplikacja spełnia wszystkie wymagania funkcjonalne, w tym obsługę natywnych funkcji Androida oraz symulację komunikacji z API.
 
-Aplikacja w obecnej wersji umożliwia przeglądanie i zarządzanie stanem magazynowym w trybie offline (dane symulowane w pamięci):
+## Funkcjonalności i Widoki
 
-1.  **Lista Inwentarza (Ekran Główny):**
-    - Wyświetla listę produktów z nazwą, kodem i statusem dostępności.
-    - Wizualne rozróżnienie statusów (kolor zielony dla "In Stock", pomarańczowy dla innych).
-    - Obsługa nawigacji do szczegółów po kliknięciu w element.
+Aplikacja składa się z 4 widoków, zapewniając pełną nawigację i obsługę procesów biznesowych:
 
-2.  **Szczegóły Produktu:**
-    - Pełny widok informacji o produkcie (opis, kod, status).
-    - **Akcje edycji:** Możliwość zmiany statusu ("In Stock" / "Low Stock") za pomocą przycisków.
-    - **Usuwanie:** Funkcja usuwania produktu z listy.
-    - Nawigacja powrotna do listy głównej.
+1.  **Lista Produktów (Home):**
+    - Wyświetla listę elementów z nazwą, unikalnym kodem oraz statusem.
+    - Statusy są wizualnie rozróżnione kolorami (Zielony: In Stock, Pomarańczowy: Low Stock).
+    - Pasek akcji umożliwia szybkie przejście do dodawania lub informacji o aplikacji.
 
-3.  **Technikalia:**
-    - Dane są przechowywane w serwisie `InventoryService` (resetują się po restarcie aplikacji).
-    - Interfejs zbudowany w oparciu o **Tailwind CSS**.
+2.  **Szczegóły Produktu (Detail):**
+    - Pełny widok atrybutów: Nazwa, Kod, Opis, Status.
+    - **Edycja:** Możliwość szybkiej zmiany statusu (In Stock / Low Stock).
+    - **Usuwanie:** Możliwość trwałego usunięcia elementu z listy.
 
-## Plan Rozwoju
+3.  **Dodawanie Produktu (Add):**
+    - Formularz z walidacją (wymagane pola: Nazwa, Kod).
+    - **Funkcja Natywna:** Przycisk "Scan Barcode" symuluje skaner, generując kod i uruchamiając wibracje telefonu.
 
-W kolejnych wersjach aplikacji planowane jest wdrożenie następujących modułów:
+4.  **O Aplikacji (About):**
+    - Widok informacyjny z wersją aplikacji i opisem.
 
-- **Dodawanie Produktów:** Formularz umożliwiający wprowadzanie nowych pozycji do magazynu.
-- **Integracja z kamerą:** Możliwość dodawania zdjęć do produktów lub skanowania kodów.
-- **Backend API:** Synchronizacja danych z serwerem (pobieranie i zapisywanie stanu magazynowego).
-- **Zarządzanie błędami:** Obsługa braku sieci oraz uprawnień systemowych.
+---
+
+## Wykorzystane Funkcje Natywne
+
+W aplikacji zaimplementowano bezpośredni dostęp do API systemu Android w widoku dodawania produktu (`InventoryAddComponent`).
+
+**Wybrane funkcje:**
+
+1.  **Wibracje (Haptic Feedback):**
+    - **Uzasadnienie:** W warunkach magazynowych (hałas) potwierdzenie zeskanowania kodu wibracją jest kluczowe dla UX pracownika.
+    - **Implementacja:** Użycie `android.os.Vibrator` poprzez kontekst aplikacji.
+2.  **Natywne Powiadomienia (Toast):**
+    - **Uzasadnienie:** Standardowy dla Androida sposób informowania o sukcesie operacji bez przerywania pracy użytkownika.
+    - **Implementacja:** Użycie `android.widget.Toast`.
+3.  **Informacje o Urządzeniu:**
+    - Pobieranie modelu urządzenia (`Device.model`) do logów lub potwierdzeń.
+
+---
+
+## API i Architektura
+
+Aplikacja realizuje wzorzec architektury opartej na serwisach (`InventoryService`).
+
+- **Symulacja API:** Ze względu na brak zewnętrznego backendu, serwis symuluje opóźnienia sieciowe (`delay`) i zwraca obiekty `Observable` (RxJS).
+- **Asynchroniczność:** Wszystkie operacje (Pobierz, Dodaj, Edytuj, Usuń) są asynchroniczne, co przygotowuje aplikację do łatwego podpięcia `HttpClient` w przyszłości.
+- **Walidacja:** Formularze posiadają zabezpieczenia przed wysłaniem pustych danych.
+
+---
 
 ## Technologie
 
-- **Framework:** NativeScript + Angular
-- **Style:** Tailwind CSS
+- **Framework:** NativeScript 8+ z Angular 18+ (Standalone Components)
+- **Styling:** Tailwind CSS (responsywny design)
 - **Język:** TypeScript
 
-## Uruchomienie projektu
+## Uruchomienie
 
-Aby uruchomić aplikację w trybie deweloperskim:
+Aby uruchomić projekt lokalnie na emulatorze Androida:
 
 ```bash
 npm install
 ns run android
 ```
+
+## Zrzuty Ekranu
+
+|       Lista Produktów       |       Szczegóły Produktu        |
+| :-------------------------: | :-----------------------------: |
+| ![Lista](screenshots/1.jpg) | ![Szczegóły](screenshots/2.jpg) |
+|      **Ekran główny**       |      **Widok szczegółów**       |
+
+|       Zmiana Statusu        |           Aktualizacja Listy           |
+| :-------------------------: | :------------------------------------: |
+| ![Alert](screenshots/3.jpg) | ![Lista po zmianie](screenshots/4.jpg) |
+|  **Potwierdzenie zmiany**   |         **Odświeżony status**          |
+
+|       Dodawanie Produktu        |         Funkcja Natywna          |
+| :-----------------------------: | :------------------------------: |
+| ![Formularz](screenshots/5.jpg) | ![Skanowanie](screenshots/6.jpg) |
+|          **Formularz**          |     **Toast po skanowaniu**      |
+
+|              Nowy Element              |         O Aplikacji         |
+| :------------------------------------: | :-------------------------: |
+| ![Lista po dodaniu](screenshots/7.jpg) | ![About](screenshots/8.jpg) |
+|           **Produkt dodany**           |   **Informacje o wersji**   |

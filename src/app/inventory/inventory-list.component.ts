@@ -13,7 +13,20 @@ import { ItemEventData } from "@nativescript/core";
   imports: [NativeScriptCommonModule],
   schemas: [NO_ERRORS_SCHEMA],
   template: `
-    <ActionBar title="Scan Inventory"> </ActionBar>
+    <ActionBar title="Scan Inventory">
+      <ActionItem
+        ios.position="right"
+        android.position="actionBar"
+        text="About"
+        (tap)="onAbout()"
+      ></ActionItem>
+      <ActionItem
+        ios.position="right"
+        android.position="actionBar"
+        text="Add"
+        (tap)="onAdd()"
+      ></ActionItem>
+    </ActionBar>
     <GridLayout class="p-t-10">
       <ListView
         [items]="items"
@@ -64,5 +77,14 @@ export class InventoryListComponent implements OnInit {
     const item = this.items[index];
     console.log("Navigating to detail for:", item.id);
     this.router.navigate(["/detail", item.id]);
+  }
+
+  onAdd() {
+    console.log("Tapped Add");
+    this.router.navigate(["/add"]);
+  }
+  onAbout() {
+    console.log("Tapped About");
+    this.router.navigate(["/about"]);
   }
 }
