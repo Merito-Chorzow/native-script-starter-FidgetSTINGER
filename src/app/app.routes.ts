@@ -1,7 +1,19 @@
 import { Routes } from "@angular/router";
-import { HomeComponent } from "./home/home.component";
 
 export const routes: Routes = [
-  { path: "", redirectTo: "/home", pathMatch: "full" },
-  { path: "home", component: HomeComponent },
+  { path: "", redirectTo: "/list", pathMatch: "full" },
+  {
+    path: "list",
+    loadComponent: () =>
+      import("./inventory/inventory-list.component").then(
+        (m) => m.InventoryListComponent
+      ),
+  },
+  {
+    path: "detail/:id",
+    loadComponent: () =>
+      import("./inventory/inventory-detail.component").then(
+        (m) => m.InventoryDetailComponent
+      ),
+  },
 ];
